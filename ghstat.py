@@ -73,7 +73,7 @@ d = sorted(
 )
 print(d)
 
-plt.figure(figsize=(8, 4.5))
+plt.figure(figsize=(8, len(d) * 9 / 50 + 1))
 c = ccycle()
 plt.barh(
     range(len(d)),
@@ -84,7 +84,9 @@ plt.barh(
     color=[lang_colours.get(k) or next(c) for k, _ in d],
     log=True,
 )
-plt.xlabel("Inserted lines")
+plt.gca().xaxis.tick_top()
+plt.gca().xaxis.set_label_position("top")
+plt.xlabel("Lines of Code written")
 
 # thresh = sum(v for _, v in d) * 0.005
 # o = [(k, v) for k, v in d if v < thresh]
