@@ -4,12 +4,9 @@ import os
 import re
 import sys
 
-import matplotlib
 import matplotlib.pyplot as plt
 import tqdm
 import yaml
-
-matplotlib.use("agg")
 
 
 def ccycle():
@@ -40,6 +37,7 @@ lang_names.update(
     bash_aliases="Shell",
     bashrc="Shell",
     m="Matlab",
+    makefile="Makefile",
 )
 lang_names["1"] = "Roff"
 
@@ -71,37 +69,46 @@ d = sorted(
         if k.lower() not in {"licence", "license", "postscript", "csv", "svg"}
     ),
     key=lambda kv: kv[1],
-    reverse=True,
+    # reverse=True,
 )
 print(d)
 
-# plt.barh([i for i, _ in d], [i for _, i in d], log=True)
-# plt.xlabel("inserted lines")
-# plt.ylabel("extension")
-
-thresh = sum(v for _, v in d) * 0.005
-o = [(k, v) for k, v in d if v < thresh]
-d = [(k, v) for k, v in d if v >= thresh] + [("Other", sum(dict(o).values()))]
-
-plt.figure(figsize=(14, 7))
-
-plt.subplot(121)
+plt.figure(figsize=(8, 4.5))
 c = ccycle()
-plt.pie(
+plt.barh(
+    range(len(d)),
     [v for _, v in d],
-    labels=[k + " " + tqdm.tqdm.format_sizeof(v) if v > 99 else v for k, v in d],
-    colors=[lang_colours.get(k) or next(c) for k, _ in d],
+    tick_label=[
+        k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d
+    ],
+    color=[lang_colours.get(k) or next(c) for k, _ in d],
+    log=True,
 )
-plt.title("Inserted lines (99.5%)")
+plt.xlabel("Inserted lines")
 
-plt.subplot(122)
-c = ccycle()
-plt.pie(
-    [v for _, v in o],
-    labels=[k + " " + tqdm.tqdm.format_sizeof(v) if v > 99 else v for k, v in o],
-    colors=[lang_colours.get(k) or next(c) for k, _ in o],
-)
-plt.title("Other (0.5%)")
+# thresh = sum(v for _, v in d) * 0.005
+# o = [(k, v) for k, v in d if v < thresh]
+# d = [(k, v) for k, v in d if v >= thresh] + [("Other", sum(dict(o).values()))]
+#
+# plt.figure(figsize=(14, 7))
+#
+# plt.subplot(121)
+# c = ccycle()
+# plt.pie(
+#     [v for _, v in d],
+#     labels=[k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d],
+#     colors=[lang_colours.get(k) or next(c) for k, _ in d],
+# )
+# plt.title("Inserted lines (99.5%)")
+#
+# plt.subplot(122)
+# c = ccycle()
+# plt.pie(
+#     [v for _, v in o],
+#     labels=[k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in o],
+#     colors=[lang_colours.get(k) or next(c) for k, _ in o],
+# )
+# plt.title("Other (0.5%)")
 
 plt.tight_layout()
 plt.savefig("ghstats.png")
