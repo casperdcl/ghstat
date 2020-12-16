@@ -1,0 +1,40 @@
+name: daily
+on:
+  push:
+  schedule:
+    - cron: '6 0 * * *'  # M H d m w (daily at 00:06)
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - run: pip install matplotlib tqdm pyyaml
+    - uses: actions/checkout@v2
+    - run: ./ghstat/ghstat.sh
+      env:
+        REPO_SLUGS: ${{ secrets.REPO_SLUGS }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_GH }}
+        AUTHOR: Casper da Costa-Luis
+    - run: |
+        git clone https://${GITHUB_TOKEN}@gist.github.com/${GIST_ID}.git stats
+        mv ghstats.png stats/
+        pushd stats
+        git add -u
+        git config user.name "Casper da Costa-Luis"
+        git config user.email casper.dcl@physics.org
+        git commit -m "update stats" || :
+        git push
+        popd
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_GH }}
+        GIST_ID: ${{ secrets.GIST_ID }}
+  shfmt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v1
+      with:
+        go-version: 1.13.x
+    - uses: actions/checkout@v2
+    - uses: casperdcl/sh@action
