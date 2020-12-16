@@ -24,7 +24,7 @@ done >>/dev/null
 echo '[2/2] processing ...'
 [[ -f languages.yml ]] || wget https://github.com/github/linguist/raw/master/lib/linguist/languages.yml
 for repo in ${REPO_SLUGS}; do
-  git -C "$this/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat
+  git -C "$this/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat | sed -r "s/(\t.*\t)/\1${this/\//\\\/}\/${repo/\//\\\/}\//"
 done |
   python -m tqdm --unit commits |
   python "$this/ghstat.py"
