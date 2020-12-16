@@ -34,7 +34,11 @@ stats = sum(
 )
 
 d = sorted(
-    ((k, v) for k, v in stats.items() if k.lower() not in {"licence", "license"}),
+    (
+        (k, v)
+        for k, v in stats.items()
+        if k.lower() not in {"licence", "license", "postscript", "csv", "svg",}
+    ),
     key=lambda kv: kv[1],
     reverse=True,
 )
