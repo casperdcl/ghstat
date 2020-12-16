@@ -66,7 +66,7 @@ d = sorted(
     (
         (k, v)
         for k, v in stats.items()
-        if k.lower() not in {"licence", "license", "postscript", "csv", "svg"}
+        if v > 0 and k.lower() not in {"licence", "license", "postscript", "csv", "svg"}
     ),
     key=lambda kv: kv[1],
     # reverse=True,
@@ -87,6 +87,7 @@ plt.barh(
 plt.gca().xaxis.tick_top()
 plt.gca().xaxis.set_label_position("top")
 plt.xlabel("Lines of Code written")
+plt.ylim(-0.5, len(d) - 0.5)
 
 # thresh = sum(v for _, v in d) * 0.005
 # o = [(k, v) for k, v in d if v < thresh]
