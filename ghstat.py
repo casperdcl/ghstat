@@ -30,7 +30,17 @@ for lang, v in langs.items():
         else:
             lang_names[ext] = lang
         lang_colours[lang] = v.get("color", None)
-lang_names.update(md="Markdown", mmd="Markdown", txt="Text", cfg="INI")
+lang_names.update(
+    md="Markdown",
+    mmd="Markdown",
+    txt="Text",
+    cfg="INI",
+    h="C++",
+    latex="TeX",
+    bash_aliases="Shell",
+    bashrc="Shell",
+    m="Matlab",
+)
 lang_names["1"] = "Roff"
 
 clean = functools.partial(re.compile(r"\{.*? => (.*?)\}").sub, r"\1")
@@ -45,7 +55,7 @@ def fn2lang(fn):
         base, ext = "", fn
     if base.lower().startswith("cmake") and ext.lower() == "txt":
         return "CMake"
-    return lang_names.get(ext, ext)
+    return lang_names.get(ext, lang_names.get(ext.lower(), ext.lower()))
 
 
 stats = collections.Counter()
