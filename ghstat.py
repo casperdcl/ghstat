@@ -1,8 +1,15 @@
-import sys, os, collections, re, functools
+import collections
+import functools
+import os
+import re
+import sys
+
 import matplotlib
+import matplotlib.pyplot as plt
+import tqdm
+import yaml
 
 matplotlib.use("agg")
-import matplotlib.pyplot as plt, tqdm, yaml
 
 
 def ccycle():
@@ -72,9 +79,7 @@ plt.subplot(121)
 c = ccycle()
 plt.pie(
     [v for _, v in d],
-    labels=[
-        "{} {}".format(k, tqdm.tqdm.format_sizeof(v) if v > 99 else v) for k, v in d
-    ],
+    labels=[k + " " + tqdm.tqdm.format_sizeof(v) if v > 99 else v for k, v in d],
     colors=[lang_colours.get(k) or next(c) for k, _ in d],
 )
 plt.title("Inserted lines (99.5%)")
@@ -83,9 +88,7 @@ plt.subplot(122)
 c = ccycle()
 plt.pie(
     [v for _, v in o],
-    labels=[
-        "{} {}".format(k, tqdm.tqdm.format_sizeof(v) if v > 99 else v) for k, v in o
-    ],
+    labels=[k + " " + tqdm.tqdm.format_sizeof(v) if v > 99 else v for k, v in o],
     colors=[lang_colours.get(k) or next(c) for k, _ in o],
 )
 plt.title("Other (0.5%)")
