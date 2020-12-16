@@ -21,9 +21,11 @@ for lang, v in langs.items():
 
 
 re_lang = re.compile(r"^\s*language:\s+(.*)", flags=re.M).search
+
+
 def fn2lang(fn):
     try:
-        assert os.path.exists(fn)
+        assert os.path.isfile(fn)
         res = subprocess.check_output(["github-linguist", fn]).decode("U8")
         return re_lang(res).group(1)
     except:
@@ -35,9 +37,7 @@ clean = functools.partial(re.compile(r"\{.*? => (.*?)\}").sub, r"\1")
 clean_whole = functools.partial(re.compile(r".*? => (.*?)").sub, r"\1")
 stats = sum(
     (
-        collections.Counter(
-            (fn2lang(clean_whole(clean(f.rstrip()))),) * int(c)
-        )
+        collections.Counter((fn2lang(clean_whole(clean(f.rstrip()))),) * int(c))
         for i in sys.stdin
         for c, f in [i.split("\t")[::2]]
         if c != "-"
