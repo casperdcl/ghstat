@@ -32,12 +32,18 @@ lang_names.update(
     mmd="Markdown",
     txt="Text",
     cfg="INI",
+    dvc="DVC",
     h="C++",
     latex="TeX",
-    bash_aliases="Shell",
     bashrc="Shell",
+    profile="Shell",
+    php="PHP",
     m="Matlab",
     makefile="Makefile",
+    gradlew="Gradle",
+    gitmodules="Git Config",
+    mailmap="Git Attributes",
+    dockerignore="Dockerfile",
 )
 lang_names["1"] = "Roff"
 
@@ -53,6 +59,8 @@ def fn2lang(fn):
         base, ext = "", fn
     if base.lower().startswith("cmake") and ext.lower() == "txt":
         return "CMake"
+    if base == "" and ext.lower().startswith("bash_"):
+        return "Shell"
     return lang_names.get(ext, lang_names.get(ext.lower(), ext.lower()))
 
 
