@@ -36,6 +36,8 @@ jobs:
     - run: ./ghstat/ghstat.sh
       env:
         REPO_SLUGS: ${{ secrets.REPO_SLUGS }}
+        USER: casperdcl
+        USER_RSKIP: ${{ secrets.USER_RSKIP }}
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN_GH }}
         AUTHOR: Casper da Costa-Luis
     - name: update gist
