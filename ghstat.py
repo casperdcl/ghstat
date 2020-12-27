@@ -81,12 +81,13 @@ d = sorted(
 )
 print(d)
 
-plt.figure(figsize=(8, len(d) * 9 / 50 + 1))
+plt.figure(figsize=(8, len(d) * 1 / 5 + 1))
 c = ccycle()
 values = [v for _, v in d]
 labels = [k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d]
 colours = [lang_colours.get(k) or next(c) for k, _ in d]
 plt.barh(range(len(values)), values, tick_label=labels, color=colours, log=True)
+[i.set(backgroundcolor="#ffffff80") for i in plt.gca().get_yticklabels()]
 plt.gca().xaxis.tick_top()
 plt.gca().xaxis.set_label_position("top")
 plt.xlabel("Lines of Code written")
@@ -97,9 +98,10 @@ plt.savefig("ghstats-b-full.png")
 plt.figure(figsize=(8, 8))
 c = ccycle()
 plt.pie(
-    [sum(values[:-15])] + values[-1:-15:-1],
-    labels=["Other"] + labels[-1:-15:-1],
-    colors=["black"] + colours[-1:-15:-1],
+    values[-15:] + [sum(values[:-15])],
+    labels=labels[-15:] + ["Other"],
+    colors=colours[-15:] + ["black"],
+    textprops={"backgroundcolor": "#ffffff80"},
 )
 plt.title("Lines of Code written")
 plt.tight_layout()

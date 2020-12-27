@@ -43,7 +43,7 @@ jobs:
     - name: update gist
       run: |
         git clone https://${GITHUB_TOKEN}@gist.github.com/${GIST_ID}.git stats
-        mv ghstats.png stats/
+        mv ghstats-*.png stats/
         pushd stats
         git add -u
         git config user.name "Casper da Costa-Luis"
