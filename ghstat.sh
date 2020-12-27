@@ -66,7 +66,7 @@ fi
 for repo in ${REPO_SLUGS}; do
   [[ -d "$this/$repo" ]] || git clone --single-branch https://${GITHUB_TOKEN}@github.com/$repo "$this/$repo" 2>&1 >>/dev/null
   echo $repo
-done | tqdm --desc "[3/4] clone" --unit repos --null
+done | tqdm --desc "[3/4] clone" --unit repos --total $(echo $REPO_SLUGS | wc -w) --mininterval 5 --null
 
 [[ -f languages.yml ]] || wget https://github.com/github/linguist/raw/master/lib/linguist/languages.yml
 for repo in ${REPO_SLUGS}; do

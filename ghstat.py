@@ -83,43 +83,24 @@ print(d)
 
 plt.figure(figsize=(8, len(d) * 9 / 50 + 1))
 c = ccycle()
-plt.barh(
-    range(len(d)),
-    [v for _, v in d],
-    tick_label=[
-        k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d
-    ],
-    color=[lang_colours.get(k) or next(c) for k, _ in d],
-    log=True,
-)
+values = [v for _, v in d]
+labels = [k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d]
+colours = [lang_colours.get(k) or next(c) for k, _ in d]
+plt.barh(range(len(values)), values, tick_label=labels, color=colours, log=True)
 plt.gca().xaxis.tick_top()
 plt.gca().xaxis.set_label_position("top")
 plt.xlabel("Lines of Code written")
 plt.ylim(-0.5, len(d) - 0.5)
-
-# thresh = sum(v for _, v in d) * 0.005
-# o = [(k, v) for k, v in d if v < thresh]
-# d = [(k, v) for k, v in d if v >= thresh] + [("Other", sum(dict(o).values()))]
-#
-# plt.figure(figsize=(14, 7))
-#
-# plt.subplot(121)
-# c = ccycle()
-# plt.pie(
-#     [v for _, v in d],
-#     labels=[k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d],
-#     colors=[lang_colours.get(k) or next(c) for k, _ in d],
-# )
-# plt.title("Inserted lines (99.5%)")
-#
-# plt.subplot(122)
-# c = ccycle()
-# plt.pie(
-#     [v for _, v in o],
-#     labels=[k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in o],
-#     colors=[lang_colours.get(k) or next(c) for k, _ in o],
-# )
-# plt.title("Other (0.5%)")
-
 plt.tight_layout()
-plt.savefig("ghstats.png")
+plt.savefig("ghstats-b-full.png")
+
+plt.figure(figsize=(8, 8))
+c = ccycle()
+plt.pie(
+    [sum(values[:-15])] + values[-1:-15:-1],
+    labels=["Other"] + labels[-1:-15:-1],
+    colors=["black"] + colours[-1:-15:-1],
+)
+plt.title("Lines of Code written")
+plt.tight_layout()
+plt.savefig("ghstats-a.png")
