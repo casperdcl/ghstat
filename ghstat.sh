@@ -18,24 +18,28 @@ if [[ -z "$USER$REPO_SLUGS" || -z "$AUTHOR" || -z "$GITHUB_TOKEN" ]]; then
 fi
 this="$(dirname $0)"
 
+ghjq() { # <endpoint> <filter>
+  # filter all pages of authenitcated requests to https://api.github.com
+  gh api --paginate "$1" | jq -r "$2"
+}
 getrepos() { # <user>
-  gh api --paginate users/$1/repos | jq -r '.[].full_name'
+  ghjq users/$1/repos '.[].full_name'
 }
 getprs() { # <user>
-  gh api --paginate "search/issues?q=is:pr+author:$1+is:merged" |
-    jq -r '.items[].repository_url | sub(".*github.com/repos/"; "")'
+  ghjq "search/issues?q=is:pr+author:$1+is:merged" \
+    '.items[].repository_url | sub(".*github.com/repos/"; "")'
 }
 getsubs() { # <user>
-  gh api --paginate users/$1/subscriptions | jq -r '.[].full_name'
+  ghjq users/$1/subscriptions '.[].full_name'
 }
 getorgs() { # <user>
-  gh api --paginate users/$1/orgs | jq -r '.[].login'
+  ghjq users/$1/orgs '.[].login'
 }
 getorgrepos() { # <org>
-  gh api --paginate orgs/$1/repos | jq -r '.[].full_name'
+  ghjq orgs/$1/repos '.[].full_name'
 }
 iscontrib() { # <user> <repo>
-  if [[ $(gh api --paginate repos/$2/contributors | jq "[.[].login | test(\"$1\")] | any") == "true" ]]; then
+  if [[ $(ghjq repos/$2/contributors "[.[].login | test(\"$1\")] | any") == "true" ]]; then
     echo $2
   fi
 }
