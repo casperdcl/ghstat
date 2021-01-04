@@ -1,0 +1,36 @@
+name: ghstat
+description: Calculate Lines of Code (LoC) written for a GitHub user
+inputs:
+  github-token:
+    description: Token with read access to all analysed repos
+    required: true
+  author:
+    description: Git author name to search for in commits
+    required: true
+  user:
+    description: GitHub username to analyse
+    required: false
+    default: ''
+  repos-incl:
+    description: GitHub repositories to include
+    required: false
+    default: ''
+  repos-skip:
+    description: Repositories to skip
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: setup
+      run: pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
+    - name: ghstat
+      run: ${{ github.action_path }}/ghstat.sh
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        AUTHOR: ${{ inputs.author }}
+        GH_USER: ${{ inputs.user }}
+        REPOS_INCL: ${{ inputs.repos-incl }}
+        REPOS_SKIP: ${{ inputs.repos-skip }}

@@ -32,14 +32,13 @@ jobs:
       with:
         python-version: '3.x'
     - uses: actions/checkout@v2
-    - run: pip install -r ./requirements.txt
-    - run: ./ghstat.sh
-      env:
-        REPO_SLUGS: ${{ secrets.REPO_SLUGS }}
-        USER: casperdcl
-        USER_RSKIP: ${{ secrets.USER_RSKIP }}
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_GH }}
-        AUTHOR: Casper da Costa-Luis
+    - uses: ./.github/..
+      with:
+        github-token: ${{ secrets.GH_TOKEN_GH }}
+        author: Casper da Costa-Luis
+        user: casperdcl
+        repos-incl: ${{ secrets.REPO_SLUGS }}
+        repos-skip: ${{ secrets.USER_RSKIP }}
     - name: update gist
       run: |
         git clone https://${GITHUB_TOKEN}@gist.github.com/${GIST_ID}.git stats
