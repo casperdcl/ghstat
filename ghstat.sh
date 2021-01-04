@@ -6,10 +6,11 @@ Usage:
   ghstat.sh
 Env:
   GH_TOKEN    : must have read access to all repos
-  AUTHOR      : git log --author
-  GH_USER     : username to automatically search repos for
-  REPOS_INCL  : list of repos
-  REPOS_SKIP  : list of repos to skip (when GH_USER is given)
+  AUTHOR      : optional, git log --author
+  GH_USER     : optional, username to automatically search repos for
+  REPOS_INCL  : optional, list of repos
+  REPOS_SKIP  : optional, list of repos to skip (when GH_USER is given)
+  GH_GIST_ID  : optional, gist ID in which to store generated graphs
 EOF
 }
 ghjq() { # <endpoint> <filter>
@@ -89,3 +90,15 @@ for repo in ${REPOS_INCL}; do
 done |
   tqdm --desc "[4/4] processing" --unit commits |
   python "$this/ghstat.py"
+
+if [[ -n "$GH_GIST_ID" ]]; then
+  git clone https://${GH_TOKEN}@gist.github.com/${GH_GIST_ID}.git stats
+  cp ghstats-*.png stats/
+  pushd stats
+  git add *.png || :
+  git config --local user.name "github-actions[bot]"
+  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  git commit -m "update stats" || :
+  git push
+  popd
+fi

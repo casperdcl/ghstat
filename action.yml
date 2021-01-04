@@ -2,8 +2,12 @@ name: ghstat
 description: Calculate Lines of Code (LoC) written for a GitHub user
 inputs:
   github-token:
-    description: Token with read access to all analysed repos
+    description: Token with read access to all analysed repos & gist write access
     required: true
+  gist-id:
+    description: ID of gist in which to store generated graphs
+    required: false
+    default: ''
   author:
     description: Git author name to search for in commit (default inferred from github-token)
     required: false
@@ -31,6 +35,7 @@ runs:
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
+        GH_GIST_ID: ${{ inputs.gist-id }}
         AUTHOR: ${{ inputs.author }}
         GH_USER: ${{ inputs.user }}
         REPOS_INCL: ${{ inputs.repos-incl }}

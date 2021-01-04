@@ -35,24 +35,11 @@ jobs:
     - uses: ./.github/..
       with:
         github-token: ${{ secrets.GH_TOKEN_GH }}
+        gist-id: ${{ secrets.GIST_ID }}
         author: Casper da Costa-Luis
         user: casperdcl
         repos-incl: ${{ secrets.REPO_SLUGS }}
         repos-skip: ${{ secrets.USER_RSKIP }}
-    - name: update gist
-      run: |
-        git clone https://${GITHUB_TOKEN}@gist.github.com/${GIST_ID}.git stats
-        mv ghstats-*.png stats/
-        pushd stats
-        git add -u
-        git config user.name "Casper da Costa-Luis"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git commit -m "update stats" || :
-        git push
-        popd
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_GH }}
-        GIST_ID: ${{ secrets.GIST_ID }}
   shfmt:
     runs-on: ubuntu-latest
     steps:
