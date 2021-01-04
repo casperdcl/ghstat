@@ -5,10 +5,11 @@ inputs:
     description: Token with read access to all analysed repos
     required: true
   author:
-    description: Git author name to search for in commits
-    required: true
+    description: Git author name to search for in commit (default inferred from github-token)
+    required: false
+    default: ''
   user:
-    description: GitHub username to analyse
+    description: GitHub username to analyse (default inferred from github-token)
     required: false
     default: ''
   repos-incl:

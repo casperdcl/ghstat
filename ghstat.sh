@@ -17,8 +17,13 @@ ghjq() { # <endpoint> <filter>
   gh api --paginate "$1" | jq -r "$2"
 }
 
-if [[ -z "$GH_USER" && -n "$GH_TOKEN" ]]; then
-  GH_USER=$(ghjq user .login)
+if [[ -n "$GH_TOKEN" ]]; then
+  if [[ -z "$GH_USER" ]]; then
+    GH_USER=$(ghjq user .login)
+  fi
+  if [[ -z "$AUTHOR" ]]; then
+    AUTHOR="$(ghjq user .name)"
+  fi
 fi
 if [[ -z "$GH_USER$REPOS_INCL" || -z "$AUTHOR" || -z "$GH_TOKEN" ]]; then
   usage

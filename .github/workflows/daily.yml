@@ -46,7 +46,7 @@ jobs:
         pushd stats
         git add -u
         git config user.name "Casper da Costa-Luis"
-        git config user.email casper.dcl@physics.org
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git commit -m "update stats" || :
         git push
         popd
