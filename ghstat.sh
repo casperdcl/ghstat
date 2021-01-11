@@ -14,7 +14,7 @@ Env:
 EOF
 }
 ghjq() { # <endpoint> <filter>
-  # filter all pages of authenitcated requests to https://api.github.com
+  # filter all pages of authenticated requests to https://api.github.com
   gh api --paginate "$1" | jq -r "$2"
 }
 

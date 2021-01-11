@@ -97,9 +97,11 @@ plt.savefig("ghstats-b-full.png", transparent=True)
 
 plt.figure(figsize=(8, 8))
 c = ccycle()
+value_other = sum(values[:-15])
 plt.pie(
-    values[-15:] + [sum(values[:-15])],
-    labels=labels[-15:] + ["Other"],
+    values[-15:] + [value_other],
+    labels=labels[-15:]
+    + ["Other " + (tqdm.tqdm.format_sizeof if value_other > 99 else str)(value_other)],
     colors=colours[-15:] + ["black"],
     textprops={"backgroundcolor": "#ffffff80"},
 )
