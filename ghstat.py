@@ -1,5 +1,6 @@
 import collections
 import functools
+import logging
 import os
 import re
 import sys
@@ -7,6 +8,9 @@ import sys
 import matplotlib.pyplot as plt
 import tqdm
 import yaml
+
+log = logging.getLogger("ghstat")
+logging.basicConfig(level=logging.INFO)
 
 
 def ccycle():
@@ -47,6 +51,7 @@ lang_names.update(
 )
 lang_names["1"] = "Roff"
 lang_names.update(i.split(":", 1) for i in sys.argv[1:])
+lang_dflt = lang_names.get("_default_", None)  # None for ext.lower()
 
 clean = functools.partial(re.compile(r"\{.*? => (.*?)\}").sub, r"\1")
 clean_whole = functools.partial(re.compile(r".*? => (.*?)").sub, r"\1")
@@ -62,7 +67,11 @@ def fn2lang(fn):
         return "CMake"
     if base == "" and ext.lower().startswith("bash_"):
         return "Shell"
-    return lang_names.get(ext, lang_names.get(ext.lower(), ext.lower()))
+    res = lang_names.get(ext, lang_names.get(ext.lower(), None))
+    if not res:
+        log.warning("Unknown extension:%s", ext)
+        return lang_dflt or ext.lower()
+    return res
 
 
 stats = collections.Counter()
@@ -80,7 +89,7 @@ d = sorted(
     key=lambda kv: kv[1],
     # reverse=True,
 )
-print(d)
+log.info(d)
 
 plt.figure(figsize=(8, len(d) * 1 / 5 + 1))
 c = ccycle()
