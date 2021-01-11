@@ -24,6 +24,10 @@ inputs:
     description: Repositories to skip
     required: false
     default: ''
+  lang-names:
+    description: Language names for extensions (e.g. `conf:INI cuh:Cuda`)
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
@@ -40,3 +44,4 @@ runs:
         GH_USER: ${{ inputs.user }}
         REPOS_INCL: ${{ inputs.repos-incl }}
         REPOS_SKIP: ${{ inputs.repos-skip }}
+        LANG_NAMES: ${{ inputs.lang-names }}

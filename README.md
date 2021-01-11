@@ -37,8 +37,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
     - uses: casperdcl/ghstat@master
       with:
         github-token: ${{ secrets.GH_TOKEN }}
@@ -47,6 +45,7 @@ jobs:
         # author: 'Casper da Costa-Luis'  # for `git log --author`, default inferred
         # repos-incl: '' # space separated list (e.g. myuser/arepo myorg/arepo)
         # repos-skip: '' # space separated list (e.g. myuser/arepo myorg/arepo)
+        # lang-names: '' # space separated list (e.g. conf:INI cuh:Cuda)
 ```
 
 Using a `GIST_ID` of `7f351ce61f01cfcfb5cfa53097954435`, the result is visible at https://gist.github.com/casperdcl/7f351ce61f01cfcfb5cfa53097954435.

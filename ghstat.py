@@ -46,6 +46,7 @@ lang_names.update(
     dockerignore="Dockerfile",
 )
 lang_names["1"] = "Roff"
+lang_names.update(i.split(":", 1) for i in sys.argv[1:])
 
 clean = functools.partial(re.compile(r"\{.*? => (.*?)\}").sub, r"\1")
 clean_whole = functools.partial(re.compile(r".*? => (.*?)").sub, r"\1")

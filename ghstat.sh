@@ -11,6 +11,7 @@ Env:
   REPOS_INCL  : optional, list of repos
   REPOS_SKIP  : optional, list of repos to skip (when GH_USER is given)
   GH_GIST_ID  : optional, gist ID in which to store generated graphs
+  LANG_NAMES  : optional, list of EXT:NAME extension name overrides
 EOF
 }
 ghjq() { # <endpoint> <filter>
@@ -89,7 +90,7 @@ for repo in ${REPOS_INCL}; do
     sed -r "s/(\t.*\t)/\1${repo_path}/"
 done |
   tqdm --desc "[4/4] processing" --unit commits |
-  python "$this/ghstat.py"
+  python "$this/ghstat.py" $LANG_NAMES
 
 if [[ -n "$GH_GIST_ID" ]]; then
   git clone https://${GH_TOKEN}@gist.github.com/${GH_GIST_ID}.git stats

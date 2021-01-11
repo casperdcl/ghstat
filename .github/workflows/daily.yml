@@ -9,8 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
     - name: set PYSHA
       run: echo "PYSHA=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
     - uses: actions/cache@v1
@@ -29,8 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
     - uses: actions/checkout@v2
     - uses: ./.github/..
       with:
@@ -40,6 +36,7 @@ jobs:
         user: casperdcl
         repos-incl: ${{ secrets.REPO_SLUGS }}
         repos-skip: ${{ secrets.USER_RSKIP }}
+        lang-names: ${{ secrets.LANG_NAMES }}
   shfmt:
     runs-on: ubuntu-latest
     steps:
