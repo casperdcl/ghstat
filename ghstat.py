@@ -19,6 +19,11 @@ def ccycle():
             yield "C%d" % i
 
 
+@functools.lru_cache()
+def warn_unknown(ext):
+    log.warning("Unknown extension:%s", ext)
+
+
 lang_names = {}
 lang_colours = {}
 langs = yaml.safe_load(open("languages.yml"))
@@ -69,7 +74,7 @@ def fn2lang(fn):
         return "Shell"
     res = lang_names.get(ext, lang_names.get(ext.lower(), None))
     if not res:
-        log.warning("Unknown extension:%s", ext)
+        warn_unknown(ext)
         return lang_dflt or ext.lower()
     return res
 
