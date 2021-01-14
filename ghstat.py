@@ -105,7 +105,7 @@ plt.barh(range(len(values)), values, tick_label=labels, color=colours, log=True)
 [i.set(backgroundcolor="#ffffff80") for i in plt.gca().get_yticklabels()]
 plt.gca().xaxis.tick_top()
 plt.gca().xaxis.set_label_position("top")
-plt.xlabel("Lines of Code written")
+plt.xlabel("%s lines of code written" % tqdm.tqdm.format_sizeof(sum(values)))
 plt.ylim(-0.5, len(d) - 0.5)
 plt.tight_layout()
 plt.savefig("ghstats-b-full.png", transparent=True)
@@ -120,6 +120,6 @@ plt.pie(
     colors=colours[-15:] + ["black"],
     textprops={"backgroundcolor": "#ffffff80"},
 )
-plt.title("Lines of Code written")
+plt.title("%s lines of code written" % tqdm.tqdm.format_sizeof(sum(values)))
 plt.tight_layout()
 plt.savefig("ghstats-a.png", transparent=True)
