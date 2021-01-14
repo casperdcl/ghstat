@@ -44,7 +44,7 @@ jobs:
         # user: casperdcl  # default inferred from github-token
         # author: 'Casper da Costa-Luis'  # for `git log --author`, default inferred
         # repos-incl: '' # space separated list (e.g. myuser/arepo myorg/arepo)
-        # repos-skip: '' # space separated list (e.g. myuser/arepo myorg/arepo)
+        # repos-skip: '' # space separated list (e.g. myuser/arepo myorg/arepo conda-forge)
         # lang-names: '' # space separated list (e.g. conf:INI cuh:Cuda)
 ```
 

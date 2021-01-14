@@ -21,7 +21,7 @@ inputs:
     required: false
     default: ''
   repos-skip:
-    description: Repositories to skip
+    description: Repositories and organisations to skip
     required: false
     default: ''
   lang-names:

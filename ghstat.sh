@@ -61,9 +61,13 @@ if [[ -n "$GH_USER" ]]; then
     getrepos $GH_USER | tqdm --desc "> [1/5] user repos" --unit repos
     getprs $GH_USER | tqdm --desc "> [2/5] pulls" --unit PRs
     getsubs $GH_USER | tqdm --desc "> [3/5] watching" --unit repos
-    for org in "$(getorgs $GH_USER | tqdm --desc "> [4/5] membership" --unit orgs)"; do
+    for org in "$(
+      getorgs $GH_USER | sort -u | comm -23 - <(
+        for i in $REPOS_SKIP; do [[ "$i" != */* ]] && echo $i; done | sort -u
+      ) | tqdm --desc "> [4/5] membership" --unit orgs
+    )"; do
       getorgrepos $org
-    done | tqdm --desc "> [4/5] org repos" --unit repos
+    done | tqdm --desc "> [5/5] org repos" --unit repos
   )"
   repos="$(echo "$repos" | sort -u | comm -23 - <(for i in $REPOS_INCL; do echo $i; done | sort -u))"
   repos="$(echo "$repos" | sort -u | comm -23 - <(for i in $REPOS_SKIP; do echo $i; done | sort -u))"
