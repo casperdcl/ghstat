@@ -30,12 +30,12 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ./.github/..
       with:
-        github-token: ${{ secrets.GH_TOKEN_GH }}
+        github-token: ${{ secrets.GH_TOKEN }}
         gist-id: ${{ secrets.GIST_ID }}
-        author: Casper da Costa-Luis
-        user: casperdcl
-        repos-incl: ${{ secrets.REPO_SLUGS }}
-        repos-skip: ${{ secrets.USER_RSKIP }}
+        # author: Casper da Costa-Luis
+        # user: casperdcl
+        repos-incl: ${{ secrets.REPOS_INCL }}
+        repos-skip: ${{ secrets.REPOS_SKIP }}
         lang-names: ${{ secrets.LANG_NAMES }}
   shfmt:
     runs-on: ubuntu-latest

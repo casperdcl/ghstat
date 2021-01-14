@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-python@v2
-    - uses: casperdcl/ghstat@master
+    - uses: casperdcl/ghstat@v2
       with:
         github-token: ${{ secrets.GH_TOKEN }}
         gist-id: ${{ secrets.GIST_ID }}
@@ -62,5 +62,6 @@ GH_TOKEN=... \
   REPOS_INCL=... \
   REPOS_SKIP=... \
   GH_GIST_ID=... \
+  LANG_NAMES=... \
   bash ghstat.sh
 ```

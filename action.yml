@@ -45,3 +45,6 @@ runs:
         REPOS_INCL: ${{ inputs.repos-incl }}
         REPOS_SKIP: ${{ inputs.repos-skip }}
         LANG_NAMES: ${{ inputs.lang-names }}
+branding:
+  icon: pie-chart
+  color: purple
