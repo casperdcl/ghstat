@@ -2,7 +2,7 @@ name: daily
 on:
   push:
   schedule:
-    - cron: '6 0 * * *'  # M H d m w (daily at 00:06)
+  - cron: '6 0 * * *'  # M H d m w (daily at 00:06)
 jobs:
   ghstat:
     runs-on: ubuntu-latest
