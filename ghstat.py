@@ -95,10 +95,16 @@ lang_names.update(
     gitmodules="Git Config",
     mailmap="Git Attributes",
     dockerignore="Dockerfile",
+    licence=".skip",
+    license=".skip",
+    pdf=".skip",
+    csv=".skip",
+    svg=".skip",
+    eps=".skip",
 )
 lang_names["1"] = "Roff"
 lang_names.update(i.split(":", 1) for i in args.lang_names)
-lang_dflt = lang_names.get("_default_", None)  # None for ext.lower()
+lang_dflt = lang_names.get(".default", None)  # None for ext.lower()
 
 clean = functools.partial(re.compile(r"\{.*? => (.*?)\}").sub, r"\1")
 clean_whole = functools.partial(re.compile(r".*? => (.*?)").sub, r"\1")
@@ -126,15 +132,10 @@ for k, v in (
     (fn2lang(f), int(c)) for i in sys.stdin for c, f in [i.split("\t")[::2]] if c != "-"
 ):
     stats[k] += v
+log.info("skipping: %d lines", stats.pop(".skip", 0))
 
 d = sorted(
-    (
-        (k, v)
-        for k, v in stats.items()
-        if v > 0 and k.lower() not in {"licence", "license", "postscript", "csv", "svg"}
-    ),
-    key=lambda kv: kv[1],
-    # reverse=True,
+    ((k, v) for k, v in stats.items() if v > 0), key=lambda kv: kv[1]  # reverse=True,
 )
 log.info(d)
 
