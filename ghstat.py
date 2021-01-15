@@ -6,8 +6,8 @@ Usage:
   ghstat [options] [<lang_names>...]
 
 Options:
-  --output-pie FILENAME  : [default: ghstats-a.png]
-  --output-barh FILENAME  : [default: ghstats-b-full.png]
+  --output-pie FILE  : [default: ghstats-a.png]
+  --output-barh FILE  : [default: ghstats-b-full.png]
   --log LEVEL  : [default: INFO]
 
 Arguments:
@@ -26,24 +26,7 @@ from argopt import argopt
 from tqdm import tqdm
 
 log = logging.getLogger("ghstat")
-args = argopt(__doc__).parse_args()
-logging.basicConfig(level=getattr(logging, args.log.upper(), logging.INFO))
-log.debug(args)
 
-
-def ccycle():
-    while True:
-        for i in range(10):
-            yield "C%d" % i
-
-
-@functools.lru_cache()
-def warn_unknown(ext):
-    log.warning("Unknown extension:%s", ext)
-
-
-lang_names = {}
-lang_colours = {}
 try:
     langs = yaml.safe_load(open("languages.yml"))
 except FileNotFoundError:
@@ -52,6 +35,40 @@ except FileNotFoundError:
         " https://github.com/github/linguist/raw/master/lib/linguist/languages.yml"
     )
     raise
+
+
+def ccycle():
+    """`matplotlib` colour cycle generator"""
+    while True:
+        for i in range(10):
+            yield "C%d" % i
+
+
+@functools.lru_cache()
+def warn_unknown(ext):
+    """warns at most once about a given file extension"""
+    log.warning("Unknown extension:%s", ext)
+
+
+class TqdmStream:
+    """`tqdm`-safe logging stream"""
+
+    @staticmethod
+    def write(msg):
+        tqdm.write(msg, end="")
+
+    @staticmethod
+    def flush():
+        sys.stderr.flush()
+
+
+args = argopt(__doc__).parse_args()
+logging.basicConfig(
+    level=getattr(logging, args.log.upper(), logging.INFO), stream=TqdmStream
+)
+log.debug(args)
+lang_names = {}
+lang_colours = {}
 for lang, v in langs.items():
     for ext in v.get("extensions", v.get("filenames", [])):
         ext = ext.lstrip(".")

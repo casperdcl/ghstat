@@ -12,7 +12,7 @@ Automatically plot total lines of code (LoC) written.
 
 Requirements:
 
-- `python`
+- `python3`
   + e.g. `uses: actions/setup-python@v2`
 - secrets
   + a [personal access token][PAT] with scopes:
