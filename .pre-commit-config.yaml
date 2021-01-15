@@ -21,7 +21,7 @@ repos:
     language: pygrep
     entry: TODO
     types: [text]
-    exclude: ^(.pre-commit-config.yaml|.github/workflows/check.yml)$
+    exclude: ^(.pre-commit-config.yaml|.github/workflows/daily.yml)$
     args: [-i]
   - id: shfmt
     name: shfmt
