@@ -83,24 +83,24 @@ if [[ -n "$GH_USER" ]]; then
 fi
 
 for repo in ${REPOS_INCL}; do
-  [[ -d "$this/$repo" ]] || git clone --single-branch https://${GH_TOKEN}@github.com/$repo "$this/$repo" 2>/dev/null >>/dev/null
+  [[ -d "$this/repos/$repo" ]] || git clone --single-branch https://${GH_TOKEN}@github.com/$repo "$this/repos/$repo" 2>/dev/null >>/dev/null
   echo $repo
 done | tqdm --desc "[3/4] clone" --unit repos --total $(echo $REPOS_INCL | wc -w) --mininterval 5 --null
 
 [[ -f languages.yml ]] || wget https://github.com/github/linguist/raw/master/lib/linguist/languages.yml
 for repo in ${REPOS_INCL}; do
-  repo_path="$(echo "$this/$repo/" | sed -r 's/(\W)/\\\1/g')"
-  git -C "$this/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat |
+  repo_path="$(echo "$this/repos/$repo/" | sed -r 's/(\W)/\\\1/g')"
+  git -C "$this/repos/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat |
     sed -r "s/(\t.*\t)/\1${repo_path}/"
 done |
   tqdm --desc "[4/4] processing" --unit commits |
   python "$this/ghstat.py" $LANG_NAMES
 
 if [[ -n "$GH_GIST_ID" ]]; then
-  git clone https://${GH_TOKEN}@gist.github.com/${GH_GIST_ID}.git stats
+  git clone --depth=2 https://${GH_TOKEN}@gist.github.com/${GH_GIST_ID}.git stats
   cp ghstats-*.png stats/
   pushd stats
-  git add *.png || :
+  git add ghstats-*.png || :
   git config --local user.name "github-actions[bot]"
   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
   git commit -m "update stats" || :
