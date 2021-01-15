@@ -1,3 +1,18 @@
+"""
+Plot graphs of lines of code per language.
+Requires stdin from `git log --format="" --numstat`.
+
+Usage:
+  ghstat [options] [<lang_names>...]
+
+Options:
+  --output-pie FILENAME  : [default: ghstats-a.png]
+  --output-barh FILENAME  : [default: ghstats-b-full.png]
+  --log LEVEL  : [default: INFO]
+
+Arguments:
+  <lang_names>  : mapping extension to name (e.g. "conf:INI")
+"""
 import collections
 import functools
 import logging
@@ -6,11 +21,14 @@ import re
 import sys
 
 import matplotlib.pyplot as plt
-import tqdm
 import yaml
+from argopt import argopt
+from tqdm import tqdm
 
 log = logging.getLogger("ghstat")
-logging.basicConfig(level=logging.INFO)
+args = argopt(__doc__).parse_args()
+logging.basicConfig(level=getattr(logging, args.log.upper(), logging.INFO))
+log.debug(args)
 
 
 def ccycle():
@@ -26,7 +44,14 @@ def warn_unknown(ext):
 
 lang_names = {}
 lang_colours = {}
-langs = yaml.safe_load(open("languages.yml"))
+try:
+    langs = yaml.safe_load(open("languages.yml"))
+except FileNotFoundError:
+    log.error(
+        "please download"
+        " https://github.com/github/linguist/raw/master/lib/linguist/languages.yml"
+    )
+    raise
 for lang, v in langs.items():
     for ext in v.get("extensions", v.get("filenames", [])):
         ext = ext.lstrip(".")
@@ -55,7 +80,7 @@ lang_names.update(
     dockerignore="Dockerfile",
 )
 lang_names["1"] = "Roff"
-lang_names.update(i.split(":", 1) for i in sys.argv[1:])
+lang_names.update(i.split(":", 1) for i in args.lang_names)
 lang_dflt = lang_names.get("_default_", None)  # None for ext.lower()
 
 clean = functools.partial(re.compile(r"\{.*? => (.*?)\}").sub, r"\1")
@@ -99,27 +124,26 @@ log.info(d)
 plt.figure(figsize=(8, len(d) * 1 / 5 + 1))
 c = ccycle()
 values = [v for _, v in d]
-labels = [k + " " + (tqdm.tqdm.format_sizeof if v > 99 else str)(v) for k, v in d]
+labels = [k + " " + (tqdm.format_sizeof if v > 99 else str)(v) for k, v in d]
 colours = [lang_colours.get(k) or next(c) for k, _ in d]
 plt.barh(range(len(values)), values, tick_label=labels, color=colours, log=True)
 [i.set(backgroundcolor="#ffffff80") for i in plt.gca().get_yticklabels()]
 plt.gca().xaxis.tick_top()
 plt.gca().xaxis.set_label_position("top")
-plt.xlabel("%s lines of code written" % tqdm.tqdm.format_sizeof(sum(values)))
+plt.xlabel("%s lines of code written" % tqdm.format_sizeof(sum(values)))
 plt.ylim(-0.5, len(d) - 0.5)
 plt.tight_layout()
-plt.savefig("ghstats-b-full.png", transparent=True)
+plt.savefig(args.output_barh, transparent=True)
 
 plt.figure(figsize=(8, 8))
-c = ccycle()
 value_other = sum(values[:-15])
 plt.pie(
     values[-15:] + [value_other],
     labels=labels[-15:]
-    + ["Other " + (tqdm.tqdm.format_sizeof if value_other > 99 else str)(value_other)],
+    + ["Other " + (tqdm.format_sizeof if value_other > 99 else str)(value_other)],
     colors=colours[-15:] + ["black"],
     textprops={"backgroundcolor": "#ffffff80"},
 )
-plt.title("%s lines of code written" % tqdm.tqdm.format_sizeof(sum(values)))
+plt.title("%s lines of code written" % tqdm.format_sizeof(sum(values)))
 plt.tight_layout()
-plt.savefig("ghstats-a.png", transparent=True)
+plt.savefig(args.output_pie, transparent=True)
