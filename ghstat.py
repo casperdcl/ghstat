@@ -198,7 +198,7 @@ with open(args.output_svg, "w") as fd:
   <mask id="ghstat-bar">
     <rect x="0" y="0" width="{width}" height="8" fill="white" rx="5"/>
   </mask>
-  <rect mask="url(#ghstat-bar)" x="0" y="0" width="{width}" height="8" fill="#d1d5da"/>
+  <rect x="0" y="0" width="{width}" height="48" fill="white" fill-opacity="0.5" rx="5"/>
   {svg_bars}
 </svg>
 """
