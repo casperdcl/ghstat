@@ -6,6 +6,7 @@ Usage:
   ghstat [options] [<lang_names>...]
 
 Options:
+  --output-svg FILE  : [default: ghstats-5.svg]
   --output-pie FILE  : [default: ghstats-a.png]
   --output-barh FILE  : [default: ghstats-b-full.png]
   --log LEVEL  : [default: INFO]
@@ -19,6 +20,7 @@ import logging
 import os
 import re
 import sys
+from math import sqrt
 
 import matplotlib.pyplot as plt
 import yaml
@@ -144,11 +146,12 @@ c = ccycle()
 values = [v for _, v in d]
 labels = [k + " " + (tqdm.format_sizeof if v > 99 else str)(v) for k, v in d]
 colours = [lang_colours.get(k) or next(c) for k, _ in d]
+total = sum(values)
 plt.barh(range(len(values)), values, tick_label=labels, color=colours, log=True)
 [i.set(backgroundcolor="#ffffff80") for i in plt.gca().get_yticklabels()]
 plt.gca().xaxis.tick_top()
 plt.gca().xaxis.set_label_position("top")
-plt.xlabel("%s lines of code written" % tqdm.format_sizeof(sum(values)))
+plt.xlabel("%s lines of code written" % tqdm.format_sizeof(total))
 plt.ylim(-0.5, len(d) - 0.5)
 plt.tight_layout()
 plt.savefig(args.output_barh, transparent=True)
@@ -162,6 +165,41 @@ plt.pie(
     colors=colours[-15:] + ["black"],
     textprops={"backgroundcolor": "#ffffff80"},
 )
-plt.title("%s lines of code written" % tqdm.format_sizeof(sum(values)))
+plt.title("%s lines of code written" % tqdm.format_sizeof(total))
 plt.tight_layout()
 plt.savefig(args.output_pie, transparent=True)
+
+# SVG
+width = 800
+svg_bars = [
+    (k, sqrt(v) * width / sum(map(sqrt, values)), c)
+    for k, v, c in zip(labels, values, colours)
+][::-1]
+
+
+def svg_langbar(offset, title, width, colour):
+    # <rect x="{offset}" y="8" width="{width}" height="10" fill="white"/>
+    return f"""
+  <rect mask="url(#ghstat-bar)" x="{offset}" y="0"
+   width="{width}" height="8" fill="{colour}"/>
+  <text x="{offset}" y="16" font-family="Monospace" font-size="8" fill="black"
+   transform="rotate({25 if len(title) * 7 > width else 0}, {offset}, 16)"
+   >{title}</text>"""
+
+
+svg_bars = "".join(
+    svg_langbar(sum(v for _, v, _ in svg_bars[:i]), *svg_bars[i])
+    for i in range(len(svg_bars))
+).lstrip()
+with open(args.output_svg, "w") as fd:
+    fd.write(
+        f"""
+<svg class="bar" xmlns="http://www.w3.org/2000/svg" width="{width}" height="48">
+  <mask id="ghstat-bar">
+    <rect x="0" y="0" width="{width}" height="8" fill="white" rx="5"/>
+  </mask>
+  <rect mask="url(#ghstat-bar)" x="0" y="0" width="{width}" height="8" fill="#d1d5da"/>
+  {svg_bars}
+</svg>
+"""
+    )

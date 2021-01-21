@@ -1,5 +1,6 @@
 /repos/
 /stats/
+/ghstats-*.svg
 /ghstats-*.png
 /languages.yml
 /.env

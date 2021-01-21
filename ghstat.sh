@@ -98,9 +98,9 @@ done |
 
 if [[ -n "$GH_GIST_ID" ]]; then
   git clone --depth=2 https://${GH_TOKEN}@gist.github.com/${GH_GIST_ID}.git stats
-  cp ghstats-*.png stats/
+  cp ghstats-*.png ghstats-*.svg stats/
   pushd stats
-  git add ghstats-*.png || :
+  git add ghstats-*.png ghstats-*.svg || :
   git config --local user.name "github-actions[bot]"
   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
   git commit -m "update stats" || :
