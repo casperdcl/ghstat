@@ -25,6 +25,7 @@ from math import sqrt
 import matplotlib.pyplot as plt
 import yaml
 from argopt import argopt
+from matplotlib import rcParams
 from tqdm import tqdm
 
 log = logging.getLogger("ghstat")
@@ -41,9 +42,9 @@ except FileNotFoundError:
 
 def ccycle():
     """`matplotlib` colour cycle generator"""
-    while True:
-        for i in range(10):
-            yield "C%d" % i
+    choices = rcParams["axes.prop_cycle"]()
+    for i in choices:
+        yield i["color"]
 
 
 @functools.lru_cache()
@@ -193,8 +194,8 @@ svg_bars = "".join(
 ).lstrip()
 with open(args.output_svg, "w") as fd:
     fd.write(
-        f"""
-<svg class="bar" xmlns="http://www.w3.org/2000/svg" width="{width}" height="48">
+        f"""<svg class="bar" xmlns="http://www.w3.org/2000/svg"
+ width="{width}" height="48">
   <mask id="ghstat-bar">
     <rect x="0" y="0" width="{width}" height="8" fill="white" rx="5"/>
   </mask>
