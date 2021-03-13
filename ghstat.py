@@ -184,7 +184,7 @@ def svg_langbar(offset, title, width, colour):
   <rect mask="url(#ghstat-bar)" x="{offset}" y="0"
    width="{width}" height="8" fill="{colour}"/>
   <text x="{offset}" y="16" font-family="Monospace" font-size="8" fill="black"
-   transform="rotate({25 if len(title) * 7 > width else 0}, {offset}, 16)"
+   transform="rotate({25 if len(title) * 6.5 > width else 0}, {offset}, 16)"
    >{title}</text>"""
 
 
