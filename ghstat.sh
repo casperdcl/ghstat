@@ -83,7 +83,9 @@ if [[ -n "$GH_USER" ]]; then
 fi
 
 for repo in ${REPOS_INCL}; do
-  [[ -d "$this/repos/$repo" ]] || git clone --single-branch https://${GH_TOKEN}@github.com/$repo "$this/repos/$repo" 2>/dev/null >>/dev/null
+  [[ -d "$this/repos/$repo" ]] ||
+    git clone --single-branch https://${GH_TOKEN}@github.com/$repo "$this/repos/$repo" 2>/dev/null >>/dev/null ||
+    echo 1>&2 -e "\nERROR: $repo"
   echo $repo
 done | tqdm --desc "[3/4] clone" --unit repos --total $(echo $REPOS_INCL | wc -w) --mininterval 5 --null
 
