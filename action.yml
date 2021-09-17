@@ -31,20 +31,20 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: setup
-      run: pip install -r ${{ github.action_path }}/requirements.txt
-      shell: bash
-    - name: ghstat
-      run: ${{ github.action_path }}/ghstat.sh
-      shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.github-token }}
-        GH_GIST_ID: ${{ inputs.gist-id }}
-        AUTHOR: ${{ inputs.author }}
-        GH_USER: ${{ inputs.user }}
-        REPOS_INCL: ${{ inputs.repos-incl }}
-        REPOS_SKIP: ${{ inputs.repos-skip }}
-        LANG_NAMES: ${{ inputs.lang-names }}
+  - name: setup
+    run: pip install -r ${{ github.action_path }}/requirements.txt
+    shell: bash
+  - name: ghstat
+    run: ${{ github.action_path }}/ghstat.sh
+    shell: bash
+    env:
+      GH_TOKEN: ${{ inputs.github-token }}
+      GH_GIST_ID: ${{ inputs.gist-id }}
+      AUTHOR: ${{ inputs.author }}
+      GH_USER: ${{ inputs.user }}
+      REPOS_INCL: ${{ inputs.repos-incl }}
+      REPOS_SKIP: ${{ inputs.repos-skip }}
+      LANG_NAMES: ${{ inputs.lang-names }}
 branding:
   icon: pie-chart
   color: purple
