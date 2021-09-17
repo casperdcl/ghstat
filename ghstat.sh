@@ -71,7 +71,7 @@ if [[ -n "$GH_USER" ]]; then
   )"
   repos="$(echo "$repos" | sort -u | comm -23 - <(for i in $REPOS_INCL; do echo $i; done | sort -u))"
   repos="$(echo "$repos" | sort -u | comm -23 - <(for i in $REPOS_SKIP; do echo $i; done | sort -u))"
-  total="$(echo $repos | wc -w)"
+  total="$(echo "$repos" | wc -w)"
   REPOS_INCL="$REPOS_INCL $(
     i=0
     for repo in $repos; do
