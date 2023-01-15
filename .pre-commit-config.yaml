@@ -2,7 +2,7 @@ default_language_version:
   python: python3
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.2.0
+  rev: v4.4.0
   hooks:
   - id: check-added-large-files
   - id: check-case-conflict
@@ -10,6 +10,7 @@ repos:
   - id: check-executables-have-shebangs
   - id: check-merge-conflict
   - id: check-yaml
+  - id: debug-statements
   - id: end-of-file-fixer
   - id: mixed-line-ending
   - id: sort-simple-yaml
@@ -19,10 +20,10 @@ repos:
   - id: todo
     name: Check TODO
     language: pygrep
+    args: [-i]
     entry: TODO
     types: [text]
     exclude: ^(.pre-commit-config.yaml|.github/workflows/daily.yml)$
-    args: [-i]
   - id: shfmt
     name: shfmt
     language: golang
@@ -30,22 +31,24 @@ repos:
     args: ['-l', '-d', '-i', '2', '-ci', '-w']
     types: [shell]
     additional_dependencies: [mvdan.cc/sh/v3/cmd/shfmt@v3.4.2]
-- repo: https://gitlab.com/pycqa/flake8
-  rev: 3.9.2
+- repo: https://github.com/PyCQA/flake8
+  rev: 5.0.4
   hooks:
   - id: flake8
-    args: [--max-line-length=88, "--extend-ignore=E203,E741"]
+    args: [-j8, --max-line-length=88, "--extend-ignore=E203,E741"]
     additional_dependencies:
+    - flake8-broken-line
     - flake8-bugbear
     - flake8-comprehensions
     - flake8-debugger
+    - flake8-isort
     - flake8-string-format
 - repo: https://github.com/psf/black
-  rev: 22.3.0
+  rev: 23.1.0
   hooks:
   - id: black
 - repo: https://github.com/PyCQA/isort
-  rev: 5.10.1
+  rev: 5.12.0
   hooks:
   - id: isort
     args: [--profile=black]
