@@ -2,7 +2,7 @@ default_language_version:
   python: python3
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v4.5.0
   hooks:
   - id: check-added-large-files
   - id: check-case-conflict
@@ -32,7 +32,7 @@ repos:
     types: [shell]
     additional_dependencies: [mvdan.cc/sh/v3/cmd/shfmt@v3.4.2]
 - repo: https://github.com/PyCQA/flake8
-  rev: 5.0.4
+  rev: 7.0.0
   hooks:
   - id: flake8
     args: [-j8, --max-line-length=88, "--extend-ignore=E203,E741"]
@@ -44,11 +44,11 @@ repos:
     - flake8-isort
     - flake8-string-format
 - repo: https://github.com/psf/black
-  rev: 23.1.0
+  rev: 24.2.0
   hooks:
   - id: black
 - repo: https://github.com/PyCQA/isort
-  rev: 5.12.0
+  rev: 5.13.2
   hooks:
   - id: isort
     args: [--profile=black]

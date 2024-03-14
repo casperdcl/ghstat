@@ -14,6 +14,7 @@ Options:
 Arguments:
   <lang_names>  : mapping extension to name (e.g. "conf:INI")
 """
+
 import collections
 import functools
 import logging
