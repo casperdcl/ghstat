@@ -8,8 +8,8 @@ jobs:
     if: github.event_name != 'pull_request' || !contains('OWNER,MEMBER,COLLABORATOR', github.event.pull_request.author_association)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v2
-    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v5
+    - uses: actions/checkout@v4
     - uses: ./.github/..
       with:
         github-token: ${{ secrets.GH_TOKEN }}
