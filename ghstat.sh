@@ -92,7 +92,7 @@ done | tqdm --desc "[3/4] clone" --unit repos --total $(echo $REPOS_INCL | wc -w
 [[ -f languages.yml ]] || wget https://github.com/github/linguist/raw/master/lib/linguist/languages.yml
 for repo in ${REPOS_INCL}; do
   repo_path="$(echo "$this/repos/$repo/" | sed -r 's/(\W)/\\\1/g')"
-  git -C "$this/repos/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat |
+  git -C "$this/repos/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat || : |
     sed -r "s/(\t.*\t)/\1${repo_path}/"
 done |
   tqdm --desc "[4/4] processing" --unit commits |
