@@ -35,8 +35,8 @@ try:
     langs = yaml.safe_load(open("languages.yml"))
 except FileNotFoundError:
     log.error(
-        "please download"
-        " https://github.com/github/linguist/raw/master/lib/linguist/languages.yml"
+        "please download https://github.com/github-linguist/linguist/raw/main"
+        "/lib/linguist/languages.yml"
     )
     raise
 

@@ -89,7 +89,7 @@ for repo in ${REPOS_INCL}; do
   echo $repo
 done | tqdm --desc "[3/4] clone" --unit repos --total $(echo $REPOS_INCL | wc -w) --mininterval 5 --null
 
-[[ -f languages.yml ]] || wget https://github.com/github/linguist/raw/master/lib/linguist/languages.yml
+[[ -f languages.yml ]] || wget https://github.com/github-linguist/linguist/raw/main/lib/linguist/languages.yml
 for repo in ${REPOS_INCL}; do
   repo_path="$(echo "$this/repos/$repo/" | sed -r 's/(\W)/\\\1/g')"
   git -C "$this/repos/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat || : |
