@@ -1,8 +1,7 @@
-name: daily
+name: cron
 on:
   push:
-  schedule:
-  - cron: '6 0 * * *'  # M H d m w (daily at 00:06)
+  schedule: [{cron: '7 0 * * 6'}]  # M H d m w (Sat at 00:07)
 jobs:
   ghstat:
     if: github.event_name != 'pull_request' || !contains('OWNER,MEMBER,COLLABORATOR', github.event.pull_request.author_association)

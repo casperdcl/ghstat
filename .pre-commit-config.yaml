@@ -23,7 +23,7 @@ repos:
     args: [-i]
     entry: TODO
     types: [text]
-    exclude: ^(.pre-commit-config.yaml|.github/workflows/daily.yml)$
+    exclude: ^(.pre-commit-config.yaml|.github/workflows/cron.yml)$
   - id: shfmt
     name: shfmt
     language: golang
