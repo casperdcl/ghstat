@@ -2,11 +2,11 @@
 
 Automatically plot total lines of code (LoC) written.
 
-![](https://gist.githubusercontent.com/casperdcl/7f351ce61f01cfcfb5cfa53097954435/raw/ghstats-5.svg)
+![](https://gist.githubusercontent.com/casperdcl/aac90b8313a905e146459c81cabade7d/raw/ghstats-5.svg)
 
-![](https://gist.githubusercontent.com/casperdcl/7f351ce61f01cfcfb5cfa53097954435/raw/ghstats-a.png)
+![](https://gist.githubusercontent.com/casperdcl/aac90b8313a905e146459c81cabade7d/raw/ghstats-a.png)
 
-<details><summary>Full breakdown</summary><img src="https://gist.githubusercontent.com/casperdcl/7f351ce61f01cfcfb5cfa53097954435/raw/ghstats-b-full.png"/></details>
+<details><summary>Full breakdown</summary><img src="https://gist.githubusercontent.com/casperdcl/aac90b8313a905e146459c81cabade7d/raw/ghstats-b-full.png"/></details>
 
 ## Usage
 
@@ -50,7 +50,7 @@ jobs:
         # lang-names: '' # space separated list (e.g. conf:INI cuh:Cuda)
 ```
 
-Using a `GIST_ID` of `7f351ce61f01cfcfb5cfa53097954435`, the result is visible at https://gist.github.com/casperdcl/7f351ce61f01cfcfb5cfa53097954435.
+Using a `GIST_ID` of `aac90b8313a905e146459c81cabade7d`, the result is visible at https://gist.github.com/casperdcl/aac90b8313a905e146459c81cabade7d.
 
 ### Running locally
 
