@@ -19,15 +19,15 @@ ghjq() { # <endpoint> <filter>
   gh api --paginate "$1" | jq -r "$2"
 }
 
-if [[ -n "$GH_TOKEN" ]]; then
-  if [[ -z "$GH_USER" ]]; then
+if test -n "$GH_TOKEN"; then
+  if test -z "$GH_USER"; then
     GH_USER=$(ghjq user .login)
   fi
-  if [[ -z "$AUTHOR" ]]; then
+  if test -z "$AUTHOR"; then
     AUTHOR="$(ghjq user .name)"
   fi
 fi
-if [[ -z "$GH_USER$REPOS_INCL" || -z "$AUTHOR" || -z "$GH_TOKEN" ]]; then
+if test -z "$GH_USER$REPOS_INCL" -o -z "$AUTHOR" -o -z "$GH_TOKEN"; then
   usage
   exit 1
 fi
@@ -50,12 +50,12 @@ getorgrepos() { # <org>
   ghjq orgs/$1/repos .[].full_name
 }
 iscontrib() { # <user> <repo>
-  if [[ $(ghjq repos/$2/contributors "[.[].login | test(\"$1\")] | any") == "true" ]]; then
+  if test $(ghjq repos/$2/contributors "[.[].login | test(\"$1\")] | any") = "true"; then
     echo $2
   fi
 }
 
-if [[ -n "$GH_USER" ]]; then
+if test -n "$GH_USER"; then
   echo 1>&2 "[1/4] detecting repos"
   repos="$(
     getrepos $GH_USER | tqdm --desc "> [1/5] user repos" --unit repos
@@ -83,13 +83,13 @@ if [[ -n "$GH_USER" ]]; then
 fi
 
 for repo in ${REPOS_INCL}; do
-  [[ -d "$this/repos/$repo" ]] ||
+  test -d "$this/repos/$repo" ||
     git clone --single-branch https://${GH_TOKEN}@github.com/$repo "$this/repos/$repo" 2>/dev/null >>/dev/null ||
     echo 1>&2 -e "\nERROR: $repo"
   echo $repo
 done | tqdm --desc "[3/4] clone" --unit repos --total $(echo $REPOS_INCL | wc -w) --mininterval 5 --null
 
-[[ -f languages.yml ]] || wget https://github.com/github-linguist/linguist/raw/main/lib/linguist/languages.yml
+test -f languages.yml || wget https://github.com/github-linguist/linguist/raw/main/lib/linguist/languages.yml
 for repo in ${REPOS_INCL}; do
   repo_path="$(echo "$this/repos/$repo/" | sed -r 's/(\W)/\\\1/g')"
   git -C "$this/repos/$repo" log --format="" -M -C -C --author="$AUTHOR" --numstat || : |
@@ -98,14 +98,16 @@ done |
   tqdm --desc "[4/4] processing" --unit commits |
   python "$this/ghstat.py" $LANG_NAMES
 
-if [[ -n "$GH_GIST_ID" ]]; then
+if test -n "$GH_GIST_ID"; then
   git clone --depth=2 https://${GH_TOKEN}@gist.github.com/${GH_GIST_ID}.git stats
   cp ghstats-*.png ghstats-*.svg stats/
   pushd stats
-  git add ghstats-*.png ghstats-*.svg || :
-  git config --local user.name "github-actions[bot]"
-  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  git commit -m "update stats" || :
-  git push
+  if ! git diff-index --quiet HEAD -- ghstats-*.svg; then
+    git add ghstats-*.png ghstats-*.svg || :
+    git config --local user.name "github-actions[bot]"
+    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    git commit -m "update stats" || :
+    git push
+  fi
   popd
 fi
