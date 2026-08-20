@@ -181,6 +181,8 @@ svg_bars = [
 
 def svg_langbar(offset, title, width, colour):
     # <rect x="{offset}" y="8" width="{width}" height="10" fill="white"/>
+    if len(colour) == 3:
+        colour = "#" + "".join(f"{int(i*255):02x}" for i in colour)
     return f"""
   <rect mask="url(#ghstat-bar)" x="{offset}" y="0"
    width="{width}" height="8" fill="{colour}"/>
