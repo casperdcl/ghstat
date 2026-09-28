@@ -32,7 +32,7 @@ repos:
     types: [shell]
     additional_dependencies: [mvdan.cc/sh/v3/cmd/shfmt@v3.4.2]
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.3.0
+  rev: 7.4.1
   hooks:
   - id: flake8
     args: [-j8, --max-line-length=88, "--extend-ignore=E203,E741"]
@@ -44,11 +44,11 @@ repos:
     - flake8-isort
     - flake8-string-format
 - repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 25.12.0
+  rev: 26.5.1
   hooks:
   - id: black
 - repo: https://github.com/PyCQA/isort
-  rev: 7.0.0
+  rev: 9.0.1
   hooks:
   - id: isort
     args: [--profile=black]

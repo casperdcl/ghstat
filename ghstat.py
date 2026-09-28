@@ -197,8 +197,7 @@ svg_bars = "".join(
 ).lstrip()
 height = 8 + max(map(len, labels)) * 8 / 3
 with open(args.output_svg, "w") as fd:
-    fd.write(
-        f"""<svg class="bar" xmlns="http://www.w3.org/2000/svg"
+    fd.write(f"""<svg class="bar" xmlns="http://www.w3.org/2000/svg"
  width="{width}" height="{height}">
   <mask id="ghstat-bar">
     <rect x="0" y="0" width="{width}" height="8" fill="white" rx="5"/>
@@ -207,5 +206,4 @@ with open(args.output_svg, "w") as fd:
    fill="white" fill-opacity="0.5" rx="5"/>
   {svg_bars}
 </svg>
-"""
-    )
+""")
